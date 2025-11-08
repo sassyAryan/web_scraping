@@ -5,6 +5,11 @@ import random
 import pandas as pd
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
+from fake_useragent import UserAgent
+
+
+ua = UserAgent()
+
 
 
 TICKERS = [
@@ -22,18 +27,6 @@ TIMEOUT = 10
 
 
 
-
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
-    " Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4) AppleWebKit/605.1.15 (KHTML, like Gecko)"
-    " Version/16.4 Safari/605.1.15",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)"
-    " Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 16_4 like Mac OS X) AppleWebKit/605.1.15"
-    " (KHTML, like Gecko) Version/16.4 Mobile/15E148 Safari/604.1"
-]
-
 def build_session(max_retries=3, backoff_factor=0.5):
     session = requests.Session()
     retries = Retry(
@@ -48,9 +41,8 @@ def build_session(max_retries=3, backoff_factor=0.5):
     return session
 
 def get_headers():
-    ua = random.choice(USER_AGENTS)
     headers = {
-        "User-Agent": ua,
+        "User-Agent": ua.random,
         "Accept-Language": "en-US,en;q=0.9",
         "Accept-Encoding": "gzip, deflate, br",
         "Connection": "keep-alive",
